@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        .vue {
+            background-color: rebeccapurple;
+            color: white;
+        }
+        
+        .class1 {
+            padding: 50px;
+        }
+    </style>
+    <div id="demo">
+        <!-- رندر کردن html -->
+        <div v-html="htmlText">{{htmlText}}</div>
+        <!--bind کردن -->
+        <p v-bind:id="id1">hello {{app}}</p>
+        <a v-bind:href="href1">github</a>
+        <p v-bind:style="stayles">hi iam zohreusefi</p>
+        <p v-bind:class="classes">iam Apprentice front-end</p>
+        <p>conter:{{conter+8}}</p>
+        <!-- دایرکتیو های eventlistner -->
+        <button v-on:click="conter++">add</button>
+        <button @click="conterredius(),conterrediuslog($event)">reduce</button>
+        <p>isvue:{{isVue?'vue.js':'react.js'}}</p>
+        <form>
+            <input type="text" v-model="txt" @keydown="handledownkey">
+            <h2>key is:{{key1}}</h2>
+        </form>
+        <h1>{{ txt }}</h1>
+        <!-- submit کردن-->
+        <form @submit.prevent="handlesubmit">
+            <input type="text" v-model="fullname">
+            <button type="submit">submit</button>
+        </form>
+        <!-- دایرکتیو های if و if-else و نمونه ی بهتر آن -->
+        <p class="vue" v-if="app==='vue.js'">vue.js</p>
+        <p class="vue" v-else-if="app==='react'">vue.js</p>
+        <p v-bind:style="stayles" v-else>react</p>
+        <p v-bind:style="stayles" v-show="!isVue">first app</p>
+        <br>
+        <br>
+        <!-- استفاده همزمان for و if -->
+        <p>vue framwork</p>
+        <ul>
+            <div v-for="framework in framworks" :key="framework">
+                <li v-if="framework!=='angular'">{{framework}}</li>
+            </div>
+        </ul>
+        <!-- رندر کردن  -->
+        <p>user info</p>
+        <ul>
+            <li v-for="(item, key, index) in upperitem" :key="item">
+                <p>{{index}}-{{key}}:{{item}}</p>
+            </li>
+        </ul>
+        <!-- computed ها -->
+        <h2>full name:{{fullname}}</h2>
+        <!-- watcher ها -->
+        <h4>input app:</h4><input type="text" v-model="app">
+        <h4>{{app}}</h4>
+
+
+    </div>
+</body>
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                htmlText: '<h2>title</h2>',
+                framworks: ['react', 'vue', 'angular'],
+                classes: ['vue', 'class1'],
+                stayles: {
+                    'background-color': 'red',
+                    color: 'white'
+                },
+                id1: 'hello',
+                href1: "https://github.com/",
+                app: 'vue.js',
+                conter: 1,
+                isVue: true,
+                txt: null,
+                key1: null,
+                key: null,
+                user: {
+                    name: "zohre",
+                    last: "usefi",
+                    age: 26
+                }
+            }
+
+        },
+        watch: {
+            app(newvalue, oldvalue) {
+                console.log("new value is:", newvalue);
+                console.log("old value is:", oldvalue);
+            }
+        },
+        computed: {
+            fullname: {
+                get() {
+                    return this.user.name + ' ' + this.user.last;
+                },
+                set(newValue) {
+                    console.log(newValue);
+                    const fullname = newValue.split(' ');
+                    this.user.name = fullname[0];
+                    this.user.last = fullname[1];
+                }
+            },
+            upperitem() {
+                return this.framworks.map(item => item.toUpperCase())
+            }
+        },
+        methods: {
+
+            handledownkey(event) {
+                this.key1 = event.key;
+                // ستفاده میکنیمthis به همه  اون دیتاهایی که داریم بخوایم دسترسی پیدا کنیمم
+            },
+            handlesubmit(event) {
+                console.log(this.user.name);
+            },
+            conterredius(number = 6) {
+                this.conter -= number;
+            },
+            conterrediuslog(event) {
+                console.log(event);
+            }
+        }
+    })
+    const vm = app.mount('#demo');
+</script>
+
+</html>
